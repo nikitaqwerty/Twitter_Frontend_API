@@ -1,5 +1,5 @@
 .env
 Twitter_Frontend_API.egg-info
-*.pyc
+# *.pyc
 # /__pycache__/
 *checkpoint.ipynb
