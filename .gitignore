@@ -4,3 +4,4 @@ Twitter_Frontend_API.egg-info
 /__pycache__
 *checkpoint.ipynb
 outputs
+.DS_Store
