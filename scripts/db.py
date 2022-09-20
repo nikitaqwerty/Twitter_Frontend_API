@@ -1,12 +1,12 @@
 import sqlite3
 import os
 
-PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
 
 class Database:
-    def __init__(self, path) -> None:
-        DB_PATH = path
+    def __init__(self, path, db_name, recreate=False) -> None:
+        DB_PATH = os.path.join(path,'outputs',db_name)
+        if recreate and os.path.exists(DB_PATH):
+            os.remove(DB_PATH)
         self._create_connection(DB_PATH)
         self.cur = self.con.cursor()
         self.con.row_factory = lambda cur, row: row[0]
