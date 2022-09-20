@@ -10,3 +10,4 @@ def db():
     db = Database(PATH,'test_twitter.db',recreate=True)
     db._create_tables()
     return db
+

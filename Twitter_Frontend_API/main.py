@@ -4,8 +4,6 @@ import json
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
-ua = UserAgent()
-
 ###例外クラス###
 class TwitterError(Exception):
     pass
@@ -14,17 +12,21 @@ class TwitterError(Exception):
 ###ログイン無し情報取得###
 
 class Client:
-    headers = {
-        'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-        'User-Agent': ua.ie
-    }
-    guest_token = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers).json()["guest_token"]
+    def __init__(self) -> None:
+        self.ua = UserAgent()
 
-    headers = {
-        'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-        'x-guest-token': guest_token,
-        'User-Agent': ua.ie
-    }
+        headers = {
+            'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+            'User-Agent': self.ua.random
+        }
+        self.guest_token = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers).json()["guest_token"]
+
+        self.headers = {
+            'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+            'x-guest-token': self.guest_token,
+            'User-Agent': self.ua.random
+        }
+        
 
     def generate_ct0(self):
         response = requests.get('https://twitter.com/i/release_notes')
@@ -42,7 +44,7 @@ class Client:
     def generate_token(self):
         headers = {
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-            'User-Agent': ua.ie
+            'User-Agent': self.ua.random
         }
         response = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers).json()
 
@@ -625,18 +627,20 @@ class Client:
 ###ログインありアカウント操作###
 
 class API(object):
+    ua = UserAgent()
+
     def __init__(self, auth):
         self.headersss = {
             'origin': 'https://twitter.com',
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': ua.ie
+            'User-Agent': ua.random
         }
 
         self.headers = {
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
             'x-csrf-token': auth["ct0"],
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': ua.ie
+            'User-Agent': ua.random
         }
 
         self.headerss = {
@@ -644,7 +648,7 @@ class API(object):
             'x-csrf-token': auth["ct0"],
             'content-type': 'application/json',
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': ua.ie
+            'User-Agent': ua.random
         }
 
     def Login(session_u, session_p):
@@ -654,7 +658,7 @@ class API(object):
 
         headers = {
             'cookie': '_mb_tk=' + authenticity,
-            'User-Agent': ua.ie
+            'User-Agent': ua.random
         }
         
         data = {
@@ -690,7 +694,7 @@ class API(object):
     def generate_token(self):
         headers = {
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-            'User-Agent': ua.ie
+            'User-Agent': ua.random
         }
         response = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers).json()
 
