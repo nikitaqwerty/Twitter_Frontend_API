@@ -1,6 +1,7 @@
 import json
 from conftest import PATH, os
-
+import pytest
+from sqlite3 import IntegrityError
 
 def test_database_add_unique_ids(db):
     ## arrange
@@ -17,3 +18,16 @@ def test_database_add_unique_ids(db):
     assert db.cur.execute("select count(*) from rtfkt_followers").fetchone()[0] == len(
         test_ids1["ids"]
     ) + len(test_ids2["ids"])
+
+@pytest.mark.xfail(raises=IntegrityError)
+def test_database_add_non_unique_ids(db):
+    ## arrange
+    with open(os.path.join(PATH, "outputs/rtfkt_ids.json"), "r") as f:
+        test_ids1 = json.load(f)
+
+    ## act
+    db.add_ids_from_list(test_ids1["ids"], test_ids1["next_cursor_str"])
+    db.add_ids_from_list(test_ids1["ids"], test_ids1["next_cursor_str"])
+
+    ## assert
+    db.cur.execute("select count(*) from rtfkt_followers").fetchone()[0] 
