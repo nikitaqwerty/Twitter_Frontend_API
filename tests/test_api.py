@@ -16,6 +16,24 @@ def test_reset_connection():
     token2 = api.guest_token
     assert token1 != token2
 
+def test_get_id_change_token_get_next_ids():
+    api = Client()
+    next_cursor = None
+
+    # get first followers batch
+    out1 = api.followers_ids("RTFKT", cursor=next_cursor)
+    ids1 = out1["ids"]
+    next_cursor = out1["next_cursor_str"]
+
+    # update identity and get next followers batch
+    api = Client()
+    out2 = api.followers_ids("RTFKT", cursor=next_cursor)
+    ids2 = out2["ids"]
+    next_cursor2 = out2["next_cursor_str"]
+
+    assert len(ids1) == 5000
+    assert len(ids2) == 5000
+
 
 
 # def test_guest_connection_with_gen_identity():
