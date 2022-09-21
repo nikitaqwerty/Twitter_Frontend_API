@@ -34,6 +34,18 @@ def test_get_id_change_token_get_next_ids():
     assert len(ids1) == 5000
     assert len(ids2) == 5000
 
+def test_final_step_in_followers_ids_list():
+    api = Client()
+    next_cursor = '1679834483866289874'
+
+    out1 = api.followers_ids("RTFKT", cursor=next_cursor)
+    next_cursor = out1["next_cursor_str"]
+
+    assert next_cursor == '0'
+
+
+    
+
 
 
 # def test_guest_connection_with_gen_identity():
