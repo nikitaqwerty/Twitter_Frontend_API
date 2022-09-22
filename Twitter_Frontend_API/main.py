@@ -626,22 +626,22 @@ class Client:
 
 ###ログインありアカウント操作###
 
-class API(object):
+class API(Client):
+    ua = UserAgent()
 
     def __init__(self, auth):
-        self.ua = UserAgent()
 
         self.headersss = {
             'origin': 'https://twitter.com',
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': self.ua.random
+            'User-Agent': API.ua.random
         }
 
         self.headers = {
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
             'x-csrf-token': auth["ct0"],
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': self.ua.random
+            'User-Agent': API.ua.random
         }
 
         self.headerss = {
@@ -649,7 +649,7 @@ class API(object):
             'x-csrf-token': auth["ct0"],
             'content-type': 'application/json',
             'cookie': 'auth_token=' + auth["auth_token"] + '; ct0=' + auth["ct0"],
-            'User-Agent': self.ua.random
+            'User-Agent': API.ua.random
         }
 
     def Login(session_u, session_p):
@@ -659,7 +659,7 @@ class API(object):
 
         headers = {
             'cookie': '_mb_tk=' + authenticity,
-            'User-Agent': self.ua.random
+            'User-Agent': API.ua.random
         }
         
         data = {
@@ -695,7 +695,7 @@ class API(object):
     def generate_token(self):
         headers = {
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-            'User-Agent': self.ua.random
+            'User-Agent': API.ua.random
         }
         response = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers).json()
 
