@@ -394,8 +394,14 @@ class Client:
         response = requests.get(url, headers=self.headers).json()
         return response
 
-    def user_show(self, screen_name, include_entities=None, tweet_mode=None):
-        url = 'https://api.twitter.com/1.1/users/show.json?screen_name=' + screen_name
+    def user_show(self, screen_name = None, id = None, include_entities=None, tweet_mode=None):
+        if screen_name:
+            url = 'https://api.twitter.com/1.1/users/show.json?screen_name=' + screen_name
+        elif id:
+            url = 'https://api.twitter.com/1.1/users/show.json?id=' + id
+        else:
+            raise NotImplementedError('provide either screen name or id')
+
         if tweet_mode != None:
             url = url + '&tweet_mode=' + tweet_mode
         response = requests.get(url, headers=self.headers).json()
