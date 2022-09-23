@@ -5,3 +5,4 @@ Twitter_Frontend_API.egg-info
 *checkpoint.ipynb
 outputs
 .DS_Store
+geckodriver.log

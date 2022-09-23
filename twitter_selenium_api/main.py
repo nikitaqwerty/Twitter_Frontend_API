@@ -3,10 +3,11 @@
 from selenium import webdriver
 from selenium import common
 from selenium.webdriver.common import keys
-from webdriver_manager.firefox import GeckoDriverManager
+# from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.common.by import By
+
 import time
 
-driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
 class TwitterBot:
 
@@ -45,29 +46,34 @@ class TwitterBot:
     def __init__(self, email, password):
         self.email = email
         self.password = password
-        self.bot = driver
+        self.bot =  webdriver.Firefox() #webdriver.Firefox(executable_path=GeckoDriverManager().install())
+
         self.is_logged_in = False
 
+    def quit_browser(self):
+        self.bot.quit()
 
     def login(self):
         bot = self.bot
-        bot.get('https://twitter.com/')
+        bot.get('https://twitter.com/login')
         time.sleep(4)
 
-        try:
-            email = bot.find_element_by_name('session[username_or_email]')
-            password = bot.find_element_by_name('session[password]')
-        except common.exceptions.NoSuchElementException:
-            time.sleep(3)
-            email = bot.find_element_by_name('session[username_or_email]')
-            password = bot.find_element_by_name('session[password]')
-        
+        # try:
+        email = bot.find_element(By.XPATH,"//input[@autocomplete='username']")
         email.clear()
-        password.clear()
         email.send_keys(self.email)
+        email.send_keys(keys.Keys.RETURN)
+        time.sleep(4)
+        try:
+            password = bot.find_element(By.XPATH,"//input[@autocomplete='current-password']")
+        except common.exceptions.NoSuchElementException:
+            time.sleep(4)
+            password = bot.find_element(By.XPATH,"//input[@autocomplete='current-password']")
+        
+        password.clear()
         password.send_keys(self.password)
         password.send_keys(keys.Keys.RETURN)
-        time.sleep(10)
+        time.sleep(4)
         self.is_logged_in = True
 
 
@@ -168,3 +174,10 @@ class TwitterBot:
         bot.find_element_by_class_name("notranslate").send_keys(keys.Keys.ENTER)
         bot.find_element_by_xpath("//div[@data-testid='tweetButton']").click()
         time.sleep(4) 
+
+
+if __name__ == '__main__':
+    from config import TWITTER_LOGIN, TWITTER_PASS
+
+    tb = TwitterBot(TWITTER_LOGIN, TWITTER_PASS)
+    tb.login()
