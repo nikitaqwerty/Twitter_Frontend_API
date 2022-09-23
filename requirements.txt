@@ -4,3 +4,5 @@ fake_useragent
 bs4
 pytest
 python-dotenv
+selenium
+webdriver-manager

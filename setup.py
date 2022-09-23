@@ -13,6 +13,7 @@ setup(
     keywords='twitter scraper frontend api',
     packages=[
         "Twitter_Frontend_API",
+        "twitter_selenium_api"
     ],
     install_requires=required,
     classifiers=[
